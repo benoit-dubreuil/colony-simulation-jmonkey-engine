@@ -1,3 +1,8 @@
+RetroFlashyRPG
+==============
+
+The master branch for the project is RetroFlashyRPG_Master. The project is based on JME v3.1 stable.
+
 jMonkeyEngine 
 =============
 
