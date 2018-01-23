@@ -34,13 +34,13 @@ package com.jme3.animation;
 import com.jme3.export.*;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import com.jme3.util.TempVars;
 import com.jme3.util.clone.Cloner;
 import com.jme3.util.clone.JmeCloneable;
-import com.jme3.util.TempVars;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +51,7 @@ import java.util.Map.Entry;
 /**
  * <code>AnimControl</code> is a Spatial control that allows manipulation
  * of skeletal animation.
- *
+ * <p>
  * The control currently supports:
  * 1) Animation blending/transitions
  * 2) Multiple animation channels
@@ -62,7 +62,7 @@ import java.util.Map.Entry;
  * 7) Hardware skinning
  * 8) Attachments
  * 9) Add/remove skins
- *
+ * <p>
  * Planned:
  * 1) Morph/Pose animation
  *
@@ -74,7 +74,9 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
      * Skeleton object must contain corresponding data for the targets' weight buffers.
      */
     Skeleton skeleton;
-    /** only used for backward compatibility */
+    /**
+     * only used for backward compatibility
+     */
     @Deprecated
     private SkeletonControl skeletonControl;
     /**
@@ -127,39 +129,39 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
             for (Entry<String, Animation> animEntry : animationMap.entrySet()) {
                 clone.animationMap.put(animEntry.getKey(), animEntry.getValue().cloneForSpatial(spatial));
             }
-            
+
             return clone;
         } catch (CloneNotSupportedException ex) {
             throw new AssertionError();
         }
     }
 
-    @Override   
+    @Override
     public Object jmeClone() {
         AnimControl clone = (AnimControl) super.jmeClone();
         clone.channels = new ArrayList<AnimChannel>();
         clone.listeners = new ArrayList<AnimEventListener>();
 
         return clone;
-    }     
+    }
 
-    @Override   
-    public void cloneFields( Cloner cloner, Object original ) {
+    @Override
+    public void cloneFields(Cloner cloner, Object original) {
         super.cloneFields(cloner, original);
-        
+
         this.skeleton = cloner.clone(skeleton);
- 
+
         // Note cloneForSpatial() never actually cloned the animation map... just its reference       
         HashMap<String, Animation> newMap = new HashMap<>();
-         
+
         // animationMap is cloned, but only ClonableTracks will be cloned as they need a reference to a cloned spatial
-        for( Map.Entry<String, Animation> e : animationMap.entrySet() ) {
+        for (Map.Entry<String, Animation> e : animationMap.entrySet()) {
             newMap.put(e.getKey(), cloner.clone(e.getValue()));
         }
-        
+
         this.animationMap = newMap;
     }
-         
+
     /**
      * @param animations Set the animations that this <code>AnimControl</code>
      * will be capable of playing. The animations should be compatible
@@ -171,7 +173,9 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
 
     /**
      * Retrieve an animation from the list of animations.
+     *
      * @param name The name of the animation to retrieve.
+     *
      * @return The animation corresponding to the given name, or null, if no
      * such named animation exists.
      */
@@ -182,6 +186,7 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
     /**
      * Adds an animation to be available for playing to this
      * <code>AnimControl</code>.
+     *
      * @param anim The animation to add.
      */
     public void addAnim(Animation anim) {
@@ -190,12 +195,12 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
 
     /**
      * Remove an animation so that it is no longer available for playing.
+     *
      * @param anim The animation to remove.
      */
     public void removeAnim(Animation anim) {
         if (!animationMap.containsKey(anim.getName())) {
-            throw new IllegalArgumentException("Given animation does not exist "
-                    + "in this AnimControl");
+            throw new IllegalArgumentException("Given animation does not exist " + "in this AnimControl");
         }
 
         animationMap.remove(anim.getName());
@@ -204,7 +209,7 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
     /**
      * Create a new animation channel, by default assigned to all bones
      * in the skeleton.
-     * 
+     *
      * @return A new animation channel for this <code>AnimControl</code>.
      */
     public AnimChannel createChannel() {
@@ -215,10 +220,11 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
 
     /**
      * Return the animation channel at the given index.
+     *
      * @param index The index, starting at 0, to retrieve the <code>AnimChannel</code>.
+     *
      * @return The animation channel at the given index, or throws an exception
      * if the index is out of bounds.
-     *
      * @throws IndexOutOfBoundsException If no channel exists at the given index.
      */
     public AnimChannel getChannel(int index) {
@@ -228,7 +234,6 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
     /**
      * @return The number of channels that are controlled by this
      * <code>AnimControl</code>.
-     *
      * @see AnimControl#createChannel()
      */
     public int getNumChannels() {
@@ -250,6 +255,25 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
     }
 
     /**
+     * Removes the AnimChannel and calls onAnimCycleDone for every AnimEventListeners.
+     *
+     * @param animChannel The AnimChannel to remove
+     *
+     * @return True if the AnimChannel was successfully removed and false otherwise.
+     */
+    public boolean removeChannel(AnimChannel animChannel) {
+        if (channels.contains(animChannel)) {
+            for (AnimEventListener list : listeners) {
+                list.onAnimCycleDone(this, animChannel, animChannel.getAnimationName());
+            }
+
+            channels.remove(animChannel);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @return The skeleton of this <code>AnimControl</code>.
      */
     public Skeleton getSkeleton() {
@@ -258,12 +282,12 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
 
     /**
      * Adds a new listener to receive animation related events.
+     *
      * @param listener The listener to add.
      */
     public void addListener(AnimEventListener listener) {
         if (listeners.contains(listener)) {
-            throw new IllegalArgumentException("The given listener is already "
-                    + "registed at this AnimControl");
+            throw new IllegalArgumentException("The given listener is already " + "registed at this AnimControl");
         }
 
         listeners.add(listener);
@@ -271,13 +295,14 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
 
     /**
      * Removes the given listener from listening to events.
+     *
      * @param listener
+     *
      * @see AnimControl#addListener(com.jme3.animation.AnimEventListener)
      */
     public void removeListener(AnimEventListener listener) {
         if (!listeners.remove(listener)) {
-            throw new IllegalArgumentException("The given listener is not "
-                    + "registed at this AnimControl");
+            throw new IllegalArgumentException("The given listener is not " + "registed at this AnimControl");
         }
     }
 
@@ -335,14 +360,15 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
 
     /**
      * Returns the length of the given named animation.
+     *
      * @param name The name of the animation
+     *
      * @return The length of time, in seconds, of the named animation.
      */
     public float getAnimationLength(String name) {
         Animation a = animationMap.get(name);
         if (a == null) {
-            throw new IllegalArgumentException("The animation " + name
-                    + " does not exist in this AnimControl");
+            throw new IllegalArgumentException("The animation " + name + " does not exist in this AnimControl");
         }
 
         return a.getLength();
