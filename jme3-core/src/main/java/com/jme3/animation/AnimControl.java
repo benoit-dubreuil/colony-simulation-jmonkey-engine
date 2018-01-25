@@ -42,10 +42,7 @@ import com.jme3.util.clone.Cloner;
 import com.jme3.util.clone.JmeCloneable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -216,6 +213,25 @@ public final class AnimControl extends AbstractControl implements Cloneable, Jme
         AnimChannel channel = new AnimChannel(this);
         channels.add(channel);
         return channel;
+    }
+
+    /**
+     * Insertion sort. Execute after having created a channel.
+     *
+     * @param channelComparator The AnimChannel comparator.
+     */
+    public void sort(Comparator<AnimChannel> channelComparator) {
+        for (int i = 1; i < channels.size(); ++i) {
+            AnimChannel key = channels.get(i);
+            int j = i - 1;
+
+            while (j >= 0 && channelComparator.compare(channels.get(j), key) == 1) {
+                channels.set(j + 1, channels.get(j));
+                --j;
+            }
+
+            channels.set(j + 1, key);
+        }
     }
 
     /**
