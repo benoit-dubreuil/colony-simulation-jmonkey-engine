@@ -231,6 +231,12 @@ public final class Transform implements Savable, Cloneable, java.io.Serializable
         return this;
     }
 
+    public Vector3f transformVectorLocal(final Vector3f v){
+        // multiply with scale first, then rotate, finally translate (cf.
+        // Eberly)
+        return rot.multLocal(v.multLocal(scale)).addLocal(translation);
+    }
+
     public Vector3f transformVector(final Vector3f in, Vector3f store){
         if (store == null)
             store = new Vector3f();
