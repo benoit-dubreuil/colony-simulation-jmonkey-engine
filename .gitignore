@@ -52,3 +52,4 @@ bin/
 *.classpath
 *.project
 .settings/
+*/out/
