@@ -229,6 +229,18 @@ public final class Vector3f implements Savable, Cloneable, java.io.Serializable 
     }
 
     /**
+     * <code>add</code> adds the provided value to this vector, creating a
+     * new vector that is then returned.
+     *
+     * @param addValue The value to add.
+     *
+     * @return the result vector.
+     */
+    public Vector3f add(float addValue) {
+        return new Vector3f(x + addValue, y + addValue, z + addValue);
+    }
+
+    /**
      * <code>addLocal</code> adds the provided values to this vector
      * internally, and returns a handle to this vector for easy chaining of
      * calls.
@@ -245,6 +257,23 @@ public final class Vector3f implements Savable, Cloneable, java.io.Serializable 
         x += addX;
         y += addY;
         z += addZ;
+        return this;
+    }
+
+    /**
+     * <code>addLocal</code> adds the provided values to this vector
+     * internally, and returns a handle to this vector for easy chaining of
+     * calls.
+     *
+     * @param addValue The value to add.
+     *
+     * @return this
+     */
+    public Vector3f addLocal(float addValue) {
+        x += addValue;
+        y += addValue;
+        z += addValue;
+
         return this;
     }
 
