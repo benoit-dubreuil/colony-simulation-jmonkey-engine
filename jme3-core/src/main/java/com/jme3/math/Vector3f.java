@@ -770,6 +770,18 @@ public final class Vector3f implements Savable, Cloneable, java.io.Serializable 
     }
 
     /**
+     * <code>subtract</code> subtracts the provided value from this vector,
+     * creating a new vector that is then returned.
+     *
+     * @param subtractValue The value to subtract.
+     *
+     * @return The result vector.
+     */
+    public Vector3f subtract(float subtractValue) {
+        return new Vector3f(x - subtractValue, y - subtractValue, z - subtractValue);
+    }
+
+    /**
      * <code>subtractLocal</code> subtracts the provided values from this vector
      * internally, and returns a handle to this vector for easy chaining of
      * calls.
@@ -786,6 +798,22 @@ public final class Vector3f implements Savable, Cloneable, java.io.Serializable 
         x -= subtractX;
         y -= subtractY;
         z -= subtractZ;
+        return this;
+    }
+
+    /**
+     * <code>subtractLocal</code> subtracts the provided values from this vector
+     * internally, and returns a handle to this vector for easy chaining of
+     * calls.
+     *
+     * @param subtractValue The value to subtract.
+     *
+     * @return this
+     */
+    public Vector3f subtractLocal(float subtractValue) {
+        x -= subtractValue;
+        y -= subtractValue;
+        z -= subtractValue;
         return this;
     }
 
