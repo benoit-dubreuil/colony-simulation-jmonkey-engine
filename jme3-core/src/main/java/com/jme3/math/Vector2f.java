@@ -121,10 +121,38 @@ public final class Vector2f implements Savable, Cloneable, java.io.Serializable 
     }
 
     /**
+     * Sets the X and Y components of the vector from another Vector3f.
+     *
+     * @param vec The to Vector3f to copy from.
+     *
+     * @return This vector.
+     */
+    public Vector2f setFromVec3XZ(Vector3f vec) {
+        this.x = vec.x;
+        this.y = vec.z;
+
+        return this;
+    }
+
+    /**
+     * Sets the X and Y components of the vector from another Vector3f.
+     *
+     * @param vec The to Vector3f to copy from.
+     *
+     * @return This vector.
+     */
+    public Vector2f setFromVec3XY(Vector3f vec) {
+        this.x = vec.x;
+        this.y = vec.y;
+
+        return this;
+    }
+
+    /**
      * <code>add</code> adds a provided vector to this vector creating a
      * resultant vector which is returned. If the provided vector is null, null
      * is returned.
-     * 
+     *
      * @param vec
      *            the vector to add to this.
      * @return the resultant vector.
@@ -592,7 +620,30 @@ public final class Vector2f implements Savable, Cloneable, java.io.Serializable 
                 - FastMath.atan2(y, x);
         return angle;
     }
-    
+
+    /**
+     * Creates a new vector perpendicular to this one.
+     *
+     * @return The newly created perpendicular vector.
+     */
+    public Vector2f perpendicular() {
+        return new Vector2f(y, -x);
+    }
+
+    /**
+     * Modify this vector so that it's perpendicular to its current value.
+     *
+     * @return This vector, which is now perpendicular to its old value.
+     */
+    public Vector2f perpendicularLocal() {
+        float tmpX = x;
+
+        x = y;
+        y = -tmpX;
+
+        return this;
+    }
+
     public float getX() {
         return x;
     }
