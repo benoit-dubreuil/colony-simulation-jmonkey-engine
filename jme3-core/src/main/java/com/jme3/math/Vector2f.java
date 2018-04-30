@@ -185,6 +185,42 @@ public final class Vector2f implements Savable, Cloneable, java.io.Serializable 
     }
 
     /**
+     * <code>addLocal</code> adds a provided 3D vector X and Z components to this vector internally,
+     * and returns a handle to this vector for easy chaining of calls. If the
+     * provided vector is null, null is returned.
+     *
+     * @param vec The vector to add to this vector.
+     * @return This
+     */
+    public Vector2f addLocalFromVec3XZ(Vector3f vec) {
+        if (null == vec) {
+            logger.warning("Provided vector is null, null returned.");
+            return null;
+        }
+        x += vec.x;
+        y += vec.z;
+        return this;
+    }
+
+    /**
+     * <code>addLocal</code> adds a provided 3D vector X and Y components to this vector internally,
+     * and returns a handle to this vector for easy chaining of calls. If the
+     * provided vector is null, null is returned.
+     *
+     * @param vec The vector to add to this vector.
+     * @return This
+     */
+    public Vector2f addLocalFromVec3XY(Vector3f vec) {
+        if (null == vec) {
+            logger.warning("Provided vector is null, null returned.");
+            return null;
+        }
+        x += vec.x;
+        y += vec.y;
+        return this;
+    }
+
+    /**
      * <code>addLocal</code> adds the provided values to this vector
      * internally, and returns a handle to this vector for easy chaining of
      * calls.
@@ -701,6 +737,14 @@ public final class Vector2f implements Savable, Cloneable, java.io.Serializable 
         } catch (CloneNotSupportedException e) {
             throw new AssertionError(); // can not happen
         }
+    }
+
+    public Vector3f toVector3fXZ() {
+        return new Vector3f(x, 0, y);
+    }
+
+    public Vector3f toVector3fXY() {
+        return new Vector3f(x, y, 0);
     }
 
     /**
