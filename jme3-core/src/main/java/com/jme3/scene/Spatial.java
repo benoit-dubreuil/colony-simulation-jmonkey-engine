@@ -226,7 +226,7 @@ public abstract class Spatial implements Savable, Cloneable, Collidable, Cloneab
      * or because the spatial has controls.  This is package private to
      * avoid exposing it to the public API since it is only used by Node.
      */
-    boolean requiresUpdates() {
+    protected boolean requiresUpdates() {
         return requiresUpdates | !controls.isEmpty();
     }
     /**

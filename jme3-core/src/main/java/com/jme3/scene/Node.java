@@ -185,7 +185,7 @@ public class Node extends Spatial {
         super.setParent(parent);
     }
 
-    private void addUpdateChildren( SafeArrayList<Spatial> results ) {
+    protected void addUpdateChildren( SafeArrayList<Spatial> results ) {
         for( Spatial child : children.getArray() ) {
             if( child.requiresUpdates() ) {
                 results.add(child);
