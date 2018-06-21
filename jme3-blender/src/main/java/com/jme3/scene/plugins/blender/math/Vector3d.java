@@ -114,9 +114,20 @@ public final class Vector3d implements Savable, Cloneable, Serializable {
     }
 
     /**
+     * Copy constructor.
+     *
+     * @param source The source to copy.
+     */
+    public Vector3d(Vector3d source) {
+        this.x = source.x;
+        this.y = source.y;
+        this.z = source.z;
+    }
+
+    /**
      * Constructor instantiates a new <code>Vector3d</code> that is a copy
      * of the provided vector
-     * @param copy
+     * @param vector3f
      *            The Vector3d to copy
      */
     public Vector3d(Vector3f vector3f) {
@@ -770,7 +781,7 @@ public final class Vector3d implements Savable, Cloneable, Serializable {
     /**
      * <code>angleBetween</code> returns (in radians) the angle between two vectors.
      * It is assumed that both this vector and the given vector are unit vectors (iow, normalized).
-     * 
+     *
      * @param otherVector
      *            a unit vector to find the angle against
      * @return the angle in radians.
