@@ -783,6 +783,11 @@ public class Node extends Spatial {
             }
         }
     }
+
+    public void setUpdateListValid(boolean updateListValid) {
+        this.updateListValid = updateListValid;
+    }
+
     @Override
     protected void breadthFirstTraversal(SceneGraphVisitor visitor, Queue<Spatial> queue) {
         queue.addAll(children);
