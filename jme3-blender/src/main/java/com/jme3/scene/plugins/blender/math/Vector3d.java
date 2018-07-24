@@ -170,6 +170,18 @@ public final class Vector3d implements Savable, Cloneable, Serializable {
     }
 
     /**
+     * <code>set</code> sets the x,y,z values of the vector by copying the
+     * supplied vector.
+     *
+     * @param vect
+     *            the vector to copy.
+     * @return this vector
+     */
+    public Vector3d set(Vector3f vect) {
+        return this.set(vect.x, vect.y, vect.z);
+    }
+
+    /**
      *
      * <code>add</code> adds a provided vector to this vector creating a
      * resultant vector which is returned. If the provided vector is null, null
