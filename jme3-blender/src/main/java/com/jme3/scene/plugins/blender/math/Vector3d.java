@@ -158,6 +158,29 @@ public final class Vector3d implements Savable, Cloneable, Serializable {
     }
 
     /**
+     * @param index
+     *            which field index in this vector to set.
+     * @param value
+     *            to set to one of x, y or z.
+     * @throws IllegalArgumentException
+     *             if index is not one of 0, 1, 2.
+     */
+    public void set(int index, double value) {
+        switch (index) {
+            case 0:
+                x = value;
+                return;
+            case 1:
+                y = value;
+                return;
+            case 2:
+                z = value;
+                return;
+        }
+        throw new IllegalArgumentException("index must be either 0, 1 or 2");
+    }
+
+    /**
      * <code>set</code> sets the x,y,z values of the vector by copying the
      * supplied vector.
      *
