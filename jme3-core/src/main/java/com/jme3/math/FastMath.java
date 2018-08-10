@@ -910,6 +910,18 @@ final public class FastMath {
     }
 
     /**
+     * Take an int input and clamp it between min and max.
+     *
+     * @param input
+     * @param min
+     * @param max
+     * @return clamped input
+     */
+    public static int clamp(int input, int min, int max) {
+        return (input < min) ? min : (input > max) ? max : input;
+    }
+
+    /**
      * Clamps the given float to be between 0 and 1.
      *
      * @param input
